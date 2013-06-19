@@ -1,0 +1,23 @@
+{
+  "name": "timer",
+  "version": "0.1.0",
+  "description": "Pauseable timer that resumes with the correct time",
+  "main": "lib/timer.js",
+  "repository": "",
+  "keywords": [
+    "pauseable",
+    "timer"
+  ],
+  "scripts": {
+    "test": "mocha -R spec test/*.js"
+  },
+  "directories": {
+	  "lib": "./lib"
+  },
+  "devDependencies": {
+	  "mocha": "x"
+  },
+  "author": "Stephen Parker",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
