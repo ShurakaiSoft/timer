@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Pauseable timer that resumes with the correct time",
   "main": "lib/timer.js",
-  "repository": "",
+  "repository": "https://github.com/ShurakaiSoft/Timer.git",
   "keywords": [
     "pauseable",
     "timer"
