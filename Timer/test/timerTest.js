@@ -162,4 +162,24 @@ describe("timer module", function () {
 			done();
 		}, 1100);
 	});
+	it("should call resume from initial state.", function (done) {
+		var timer = new Timer();
+		var tickCount = 0;
+		
+		timer.resume();
+		timer.on('tick', function () {
+			tickCount++;
+		});
+		setTimeout(function () {
+			if (tickCount !== 0) {
+				should.fail("Ticker running too fast");
+			}
+		}, 950);
+		setTimeout(function () {
+			if (tickCount !== 1) {
+				should.fail("Ticker running too slow");
+			}
+			done();
+		}, 1050);
+	});
 });
