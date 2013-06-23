@@ -182,4 +182,18 @@ describe("timer module", function () {
 			done();
 		}, 1050);
 	});
+	it("should 'tick' after 100 milliseconds", function (done) {
+		var timer = new Timer(100);
+		var tickCount = 0;
+		
+		timer.start();
+		timer.on('tick', function () {
+			tickCount++;
+		});
+		setTimeout(function () {
+			tickCount.should.equal(1);
+			done();
+		}, 150);
+	});
+	
 });

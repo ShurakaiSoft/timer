@@ -1,4 +1,4 @@
-# Timer Module
+# timer
 
 ## Motivation
 
@@ -12,16 +12,15 @@ remainder of a 'tick' and not the length of a full 'tick'.
 ### requirements
 
 * Node.js Module
-* 1 second resolution
+* user configurable resolution. default: 1 second
 * produce 'tick' events every second
 * Pauseable, and still keep accurate running time
 * Simple API
-* Can have many timers per application.
+* Can have many timers per application
 
-### Future extensions
+### To Do
 
-* Sub-second resolution. (configurable)
-
+* refactor tests to make them run faster.
 
 
 ## Usage
@@ -63,6 +62,8 @@ generated and then `start` to produce a full 'tick'.
 
 
 ## Tests
+
+requires `mocha` and `should` to be installed.
 
 Uses mocha for tests.
 
