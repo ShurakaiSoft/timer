@@ -15,7 +15,7 @@ describe("timer module", function () {
 		timer.should.have.ownProperty('resume');
 	});
 	it("should create 'tick' events", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		
 		timer.once('tick', function () {
 			done();
@@ -23,55 +23,51 @@ describe("timer module", function () {
 		timer.start();
 	});
 	it("should pause tick events", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		
 		timer.on('tick', function () {
 			should.fail("Still ticking after being stopped.");
 		});
 		setTimeout(function () {
 			done();
-		}, 1200);
+		}, 250);
 		timer.start();
 		timer.pause();
 	});
 	it("should restart", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		var start = Date.now();
 		var elapsed = 0;
-		
+
+		timer.start();
 		timer.once('tick', function () {
 			elapsed = Date.now() - start;
-			if (elapsed < 1500) {
-				should.fail("reset failed.");
-			}
+			elapsed.should.be.within(100, 200);
 			done();
 		});
-		timer.start();
 		setTimeout(function () {
 			timer.start();
-		}, 500);
+		}, 50);
 	});
 	it("should pause", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		var start = Date.now();
-		var elapsed = 0;
+		var tickCount = 0;
 		
-		timer.once('tick', function () {
-			elapsed = Date.now() - start;
-			if (elapsed < 1150) {
-				should.fail("did not pause");
-			} else if (elapsed > 1250) {
-				should.fail("paused for too long");
-			}
-			done();
-		});
 		timer.start();
+		timer.on('tick', function () {
+			tickCount++;
+		});
 		setTimeout(function () {
 			timer.pause();
-		}, 200);
+		}, 150);
 		setTimeout(function () {
 			timer.resume();
-		}, 400);
+		}, 350);
+		setTimeout(function () {
+			tickCount.should.equal(2);
+			done();
+		},420);
 	});
 	it("should pause many times", function (done) {
 		var timer = new Timer();
@@ -176,8 +172,8 @@ describe("timer module", function () {
 			done();
 		}, 1050);
 	});
-	it("should 'tick' after 100 milliseconds", function (done) {
-		var timer = new Timer(100);
+	it("should 'tick' after 200 milliseconds", function (done) {
+		var timer = new Timer(200);
 		var tickCount = 0;
 		
 		timer.start();
@@ -187,7 +183,7 @@ describe("timer module", function () {
 		setTimeout(function () {
 			tickCount.should.equal(1);
 			done();
-		}, 150);
+		}, 250);
 	});
 	
 });
