@@ -106,29 +106,23 @@ describe("timer module", function () {
 		}, 600);
 	});
 	it("should pause then continue normally", function (done) {
-		this.timeout(3000);
-		var timer = new Timer();
+		var timer = new Timer(100);
 		var start = Date.now();
 		var tickCount = 0;
 		timer.on('tick', function () {
 			tickCount++;
-			if (tickCount == 2) {
-				var elapsed = Date.now() - start;
-				if (elapsed < 2050) {
-					should.fail("pause too short: " + elapsed);
-				} else if (elapsed > 2150) {
-					should.fail("pause too long: " + elapsed);
-				}
-				done();
-			}
 		});
 		timer.start();
 		setTimeout(function () {
 			timer.pause();
-		}, 100);
+		}, 150);
 		setTimeout(function () {
 			timer.resume();
-		}, 200);
+		}, 250);
+		setTimeout(function () {
+			tickCount.should.equal(2);
+			done();
+		},350);
 	});
 	it("should do nothing if pause is called before start", function (done) {
 		var timer = new Timer();
