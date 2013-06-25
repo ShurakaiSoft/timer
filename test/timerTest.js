@@ -70,36 +70,37 @@ describe("timer module", function () {
 		},420);
 	});
 	it("should pause many times", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		var start = Date.now();
-		timer.once('tick', function () {
-			var elapsed = Date.now() - start;
-			if (elapsed < 1250) {
-				should.fail("pause too short: " + elapsed);
-			} else if (elapsed > 1350) {
-				should.fail("pause too long: " + elapsed);
-			}
-			done();
-		});
+		var tickCount = 0;
+		
 		timer.start();
+		timer.on('tick', function () {
+			tickCount++;
+		});
+		
 		setTimeout(function () {
 			timer.pause();
-		}, 100);
+		}, 120);
 		setTimeout(function () {
 			timer.resume();
-		}, 200);
+		}, 220);
 		setTimeout(function () {
 			timer.pause();
-		}, 300);
+		}, 280);
 		setTimeout(function () {
 			timer.resume();
-		}, 400);
+		}, 380);
 		setTimeout(function () {
 			timer.pause();
-		}, 500);
+		}, 450);
 		setTimeout(function () {
 			timer.resume();
-		}, 600);
+		}, 550);
+		setTimeout(function () {
+			tickCount.should.equal(3);
+			done();
+		}, 650);
 	});
 	it("should pause then continue normally", function (done) {
 		var timer = new Timer(100);
@@ -121,7 +122,7 @@ describe("timer module", function () {
 		},350);
 	});
 	it("should do nothing if pause is called before start", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
 		var start = Date.now();
 		var elapsed = 0;
 
@@ -129,48 +130,43 @@ describe("timer module", function () {
 		timer.start();
 		timer.once('tick', function () {
 			elapsed = Date.now() - start;
-			elapsed.should.be.within(950, 1050);
+			elapsed.should.be.within(50, 150);
 			done();
 		});
 	});
 	it("should allow multiple timers", function (done) {
-		var timerA = new Timer();
-		var timerB = new Timer();
-		var aTicked = false;
+		var timerA = new Timer(100);
+		var timerB = new Timer(100);
+		var aTickCount = 0;
 		
 		timerA.start();
-		timerA.once('tick', function () {
-			aTicked = true;
+		timerA.on('tick', function () {
+			aTickCount++;
 		});
-		timerB.on('tick', function () {
+		timerB.once('tick', function () {
 			should.fail("Wrong timer ticked!");
 		});
 		setTimeout(function () {
-			if (!aTicked) {
-				should.fail("Running timer never ticked!");
-			}
+			aTickCount.should.equal(2);
 			done();
-		}, 1100);
+		}, 250);
 	});
 	it("should call resume from initial state.", function (done) {
-		var timer = new Timer();
+		var timer = new Timer(100);
+		var elapsedTime = 0;
 		var tickCount = 0;
+		var startTime = Date.now();
 		
 		timer.resume();
 		timer.on('tick', function () {
 			tickCount++;
 		});
 		setTimeout(function () {
-			if (tickCount !== 0) {
-				should.fail("Ticker running too fast");
-			}
-		}, 950);
-		setTimeout(function () {
-			if (tickCount !== 1) {
-				should.fail("Ticker running too slow");
-			}
+			tickCount.should.equal(1);
+			elapsedTime = Date.now() - startTime;
+			elapsedTime.should.be.within(80, 135);
 			done();
-		}, 1050);
+		}, 115);
 	});
 	it("should 'tick' after 200 milliseconds", function (done) {
 		var timer = new Timer(200);
